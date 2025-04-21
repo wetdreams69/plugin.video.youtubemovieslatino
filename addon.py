@@ -17,7 +17,7 @@ def list_channels():
     channels = get_channels()
     
     for channel_id in channels:
-        youtube_url = f'plugin://plugin.video.youtube/channel/{channel_id}/'
+        youtube_url = f'plugin://plugin.video.youtube/channel/{channel_id}/?browse=1'
         
         list_item = xbmcgui.ListItem(label=channel_id)
         list_item.setArt({'icon': 'DefaultFolder.png'})
