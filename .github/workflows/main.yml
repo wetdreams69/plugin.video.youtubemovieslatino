@@ -13,20 +13,26 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v3
 
-      - name: Set repo name in env var
+      - name: Set repo name as env var
         run: echo "REPO_NAME=${GITHUB_REPOSITORY##*/}" >> $GITHUB_ENV
 
-      - name: Create clean plugin folder and zip it
+      - name: Prepare zip without unwanted files
         run: |
           mkdir -p temp/${REPO_NAME}
-          # Excluir archivos/directorios no deseados al copiar
-          rsync -av --exclude=".git" --exclude=".gitignore" --exclude="${REPO_NAME}.zip" --exclude=".github" --exclude="temp" ./ temp/${REPO_NAME}/
+          rsync -av \
+            --exclude=".git" \
+            --exclude=".gitignore" \
+            --exclude="${REPO_NAME}.zip" \
+            --exclude=".github" \
+            --exclude="temp" \
+            ./ temp/${REPO_NAME}/
+          
           cd temp
-          zip -r ../${REPO_NAME}.zip ${REPO_NAME}
+          zip -r ../${REPO_NAME}.zip ${REPO_NAME} -x "*.git*" "*/temp/*"
           cd ..
           rm -rf temp
 
-      - name: Commit and push new zip
+      - name: Commit and push zip file
         env:
           REPO_NAME: ${{ env.REPO_NAME }}
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
