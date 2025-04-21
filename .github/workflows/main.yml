@@ -28,7 +28,7 @@ jobs:
             ./ temp/${REPO_NAME}/
           
           cd temp
-          zip -r ../${REPO_NAME}.zip ${REPO_NAME} -x "*.git*" "*/temp/*"
+          zip -r ../${REPO_NAME}.zip ${REPO_NAME} -x '*/.git/*' -x '*/temp/*'
           cd ..
           rm -rf temp
 
