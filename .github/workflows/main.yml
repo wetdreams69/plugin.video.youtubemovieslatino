@@ -16,23 +16,27 @@ jobs:
       - name: Set repo name in env var
         run: echo "REPO_NAME=${GITHUB_REPOSITORY##*/}" >> $GITHUB_ENV
 
-      - name: Create plugin folder and zip it
+      - name: Create clean plugin folder and zip it
         run: |
           mkdir -p temp/${REPO_NAME}
-          shopt -s extglob
-          cp -r !(temp|*.zip|.git|.github) temp/${REPO_NAME}/
-          zip -r ${REPO_NAME}.zip temp/${REPO_NAME}
-
-      - name: Remove temp folder
-        run: rm -rf temp
+          # Excluir archivos/directorios no deseados al copiar
+          rsync -av --exclude=".git" --exclude=".gitignore" --exclude="${REPO_NAME}.zip" --exclude=".github" --exclude="temp" ./ temp/${REPO_NAME}/
+          cd temp
+          zip -r ../${REPO_NAME}.zip ${REPO_NAME}
+          cd ..
+          rm -rf temp
 
       - name: Commit and push new zip
+        env:
+          REPO_NAME: ${{ env.REPO_NAME }}
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
 
           git add ${REPO_NAME}.zip
           git diff --cached --quiet && echo "No changes to commit" && exit 0
-          
+
           git commit -m "Update zip file on push"
-          git push
+          git remote set-url origin https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
+          git push origin HEAD:main
