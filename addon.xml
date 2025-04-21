@@ -15,6 +15,7 @@
         <summary lang="es">Muestra peliculas de YouTube</summary>
         <description lang="es">Este addon lista peliculas de Youtube.</description>
         <platform>all</platform>
+         <icon>icon.png</icon>
         <license>MIT</license>
         <language>es</language>
         <website>https://github.com/wetdreams69/plugin.video.youtubemovieslatino</website>
