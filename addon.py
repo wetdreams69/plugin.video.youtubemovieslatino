@@ -29,6 +29,7 @@ def save_channel_name_cache(cache):
         log(f"Error guardando cache de nombres de canales: {e}", xbmc.LOGERROR)
 
 def get_channel_name_from_youtube_addon(channel_id):
+    """Obtiene el nombre del canal usando el addon de YouTube de Kodi o el cache."""
     cache = load_channel_name_cache()
     if channel_id in cache:
         return cache[channel_id]
@@ -78,6 +79,7 @@ def log(message, level=xbmc.LOGDEBUG):
 
 def list_channels():
     channels = get_channels()
+    log(f"Listando canales: {channels}")  # Log de depuración
     
     for channel_id in channels:
         channel_name = get_channel_name_from_youtube_addon(channel_id)
