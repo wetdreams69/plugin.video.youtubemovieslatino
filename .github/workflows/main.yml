@@ -47,5 +47,4 @@ jobs:
           git commit -m "Update zip file on push"
           git remote set-url origin https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git
           
-          git push origin HEAD:master --force
-          
+          git push origin HEAD:master          
