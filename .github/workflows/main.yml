@@ -48,5 +48,5 @@ jobs:
           
           git pull origin main --rebase
           
-          git push origin HEAD:master
+          git push origin HEAD:master --force
           
